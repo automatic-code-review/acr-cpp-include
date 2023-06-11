@@ -1,3 +1,4 @@
+import hashlib
 import os
 
 
@@ -38,7 +39,11 @@ def review(config):
                     name = __get_name(name)
 
                     if not __contains_include(depara, name, conteudo, suffix_get):
-                        print(f'Include {name} nao utilizado no arquivo {in_file}')
+                        comment = f'Include {name} nao utilizado no arquivo {in_file}'
+                        comments.append({
+                            "id": __generate_md5(comment),
+                            "comment": comment,
+                        })
 
     return comments
 
@@ -93,3 +98,9 @@ def __ignore_path(path, ignore_path):
             return True
 
     return False
+
+
+def __generate_md5(string):
+    md5_hash = hashlib.md5()
+    md5_hash.update(string.encode('utf-8'))
+    return md5_hash.hexdigest()
